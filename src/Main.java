@@ -45,12 +45,14 @@ public class Main {
                 subArrayResult = Double.parseDouble(subArray.get(0));
                 removeSubArray(s);
                 arrayChar.set(getIndex(arrayChar, "("), String.valueOf(subArrayResult));
-            }
-            else if (getIndex(s, "^") > 0 && getIndex(s, "√") >= 0) {
+            } else if (getIndex(s, "-") == 0 || getIndex(s, "-") == getIndex(s, "(") + 1) {
+                result = 0 - Double.parseDouble(s.get(getIndex(s, "-") + 1));
+                s.set(getIndex(s, "-") + 1, String.valueOf(result));
+                s.remove(getIndex(s, "-"));
+            } else if (getIndex(s, "^") > 0 && getIndex(s, "√") >= 0) {
                 if (getIndex(s, "^") < getIndex(s, "√")) {
                     result = pow(s);
                     overwriting(s, getIndex(s, "^"), result);
-
                 } else {
                     result = sqrt(s);
                     s.set(getIndex(s, "√") + 1, String.valueOf(result));
@@ -98,7 +100,7 @@ public class Main {
                 result = addition(s);
                 overwriting(s, getIndex(s, "+"), result);
 
-            } else if (getIndex(s, "-") > 0) {
+            } else if (getIndex(s, "-") >= 0) {
                 result = subtraction(s);
                 overwriting(s, getIndex(s, "-"), result);
             }
@@ -110,6 +112,7 @@ public class Main {
             strings.remove(i);
         }
     }
+
     public static double multiplication(ArrayList<String> strings) { //умножение
         return Double.parseDouble(strings.get(getIndex(strings, "*") - 1)) *
                 Double.parseDouble(strings.get(getIndex(strings, "*") + 1));
@@ -138,7 +141,6 @@ public class Main {
     public static double sqrt(ArrayList<String> strings) { //квадратный корень
         return Math.sqrt(Double.parseDouble(strings.get(getIndex(strings, "√") + 1)));
     }
-
 
     public static void overwriting(ArrayList<String> strings, int i, double result) { //удаление использованных чисел и замена их на результат выражения
         strings.set(i, String.valueOf(result));
